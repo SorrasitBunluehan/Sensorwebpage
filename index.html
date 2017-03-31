@@ -2,93 +2,108 @@
   <head>
    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
    <script src="https://cdn.netpie.io/microgear.js"></script>
-   <script type="text/javascript">
-
-  // const APPID     = "HelloNetpie1";
-  // const APPKEY    = "ioBXGzWuhroq3Nf";
-  // const APPSECRET = "sORBB7XppfFYLswdpBgj5NrNO";
- 
-  var humid,temp;
-  var chart1,chart2;
-
-  var a = location.hash.substring(1).split(':');
-  const APPID = a[0];
-  const APPKEY = a[1];
-  const APPSECRET = a[2];
-
-  google.charts.load('current', {'packages':['gauge']});
-  google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-
-         var data1  = google.visualization.arrayToDataTable([
-          ['Label', 'Value'],
-          ['Temperature', 0],
-          
-        ]);
-          var data2  = google.visualization.arrayToDataTable([
-          ['Label', 'Value'],
-          ['Humid', 0]
-          
-        ]);
-
-        var options = {
-          width: 800, height: 300,
-          redFrom: 90, redTo: 100,
-          yellowFrom:75, yellowTo: 90,
-          minorTicks: 5
-        };
-         chart1 = new google.visualization.Gauge(document.getElementById('chart_div1'));
-
-        chart1.draw(data1, options);
-         chart2 = new google.visualization.Gauge(document.getElementById('chart_div2'));
-
-        chart2.draw(data2, options);
-
-  
-        setInterval(function() {
-          data1.setValue(0, 1, temp);
-           data2.setValue(0, 1, humid);
-          chart1.draw(data1, options);
-          chart2.draw(data2, options);
-        }, 1000);
-      }
-
-
-  var microgear = Microgear.create({
-    key: APPKEY,
-    secret: APPSECRET,
-    alias : "myhtml"         /*  optional  */
-  });
-
-  microgear.on('message',function(topic,msg) {
-    var data = msg.split(":");
-    humid = data[1];
-    temp = data[0];
-    //document.getElementById("data").innerHTML = msg;
-  });
-
-  microgear.on('connected', function() {
-    microgear.subscribe("/DHT22");
-    microgear.setAlias('htmlgear');    /* alias can be renamed anytime with this function */
-  });
-
-  microgear.on('present', function(event) {
-    console.log(event);
-  });
-
-  microgear.on('absent', function(event) {
-    console.log(event);
-  });
-
-  microgear.connect(APPID);
-
-    
-      
-    </script>
   </head>
-  <body style="margin: auto;">
-    <div id="chart_div1" align="center"></div>
-     <div id="chart_div2" align="center"></div>
+  <body style="margin: auto;height: 100vh">
+    <div style="width: 100vw;height: 10vh">
+      <div id="status" style="float:right;">offline</div>
+    </div>
+    <div id="wrapper" style="text-align: center;height: 90vh">    
+      <div id="yourdiv" style="display: inline-block;">
+        <div style="width: 100vw">
+          <div id="chart_div1" align="center"></div>
+        </div>
+        <div style="width: 100vw">
+          <div id="chart_div2" align="center"></div>
+        </div>
+      </div>
+    </div>
+    
   </body>
+  <script type="text/javascript">
+
+    // const APPID     = "HelloNetpie1";
+    // const APPKEY    = "ioBXGzWuhroq3Nf";
+    // const APPSECRET = "sORBB7XppfFYLswdpBgj5NrNO";
+   
+    var humid,temp;
+    var chart1,chart2;
+
+    var a = location.hash.substring(1).split(':');
+    const APPID = a[0];
+    const APPKEY = a[1];
+    const APPSECRET = a[2];
+
+    google.charts.load('current', {'packages':['gauge']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+       var data1  = google.visualization.arrayToDataTable([
+        ['Label', 'Value'],
+        ['Temperature', 0],
+        
+      ]);
+        var data2  = google.visualization.arrayToDataTable([
+        ['Label', 'Value'],
+        ['Humid', 0]
+        
+      ]);
+
+      var options1 = {
+        width: 800, height: 300,
+        redFrom: 40, redTo: 60,
+        yellowFrom:30, yellowTo: 40,
+        minorTicks: 5,max:60
+      };
+
+      var options2 = {
+        width: 800, height: 300,
+        minorTicks: 5
+      };
+
+      chart1 = new google.visualization.Gauge(document.getElementById('chart_div1'));
+      chart1.draw(data1, options1);
+      chart2 = new google.visualization.Gauge(document.getElementById('chart_div2'));
+      chart2.draw(data2, options2);
+
+      setInterval(function() {
+        data1.setValue(0, 1, temp);
+        data2.setValue(0, 1, humid);
+        chart1.draw(data1, options1);
+        chart2.draw(data2, options2);
+      }, 1000);
+    }
+
+    var microgear = Microgear.create({
+      key: APPKEY,
+      secret: APPSECRET,
+      alias : "myhtml"         /*  optional  */
+    });
+
+    microgear.on('message',function(topic,msg) {
+      var data = msg.split(":");
+      humid = data[1];
+      temp = data[0];
+    });
+
+    microgear.on('connected', function() {
+      microgear.subscribe("/DHT22");
+      microgear.setAlias('htmlgear');    /* alias can be renamed anytime with this function */
+    });
+
+    microgear.on('present', function(event) {
+      if(event.alias=="Light_control"){
+         document.getElementById("status").innerHTML = "online";
+      }
+    });
+
+    microgear.on('absent', function(event) {
+      if(event.alias=="Light_control"){
+         humid = 0;
+         temp = 0;
+         document.getElementById("status").innerHTML = "offline";
+      }
+    });
+    microgear.connect(APPID);
+    </script>
 </html>
