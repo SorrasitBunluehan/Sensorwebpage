@@ -1,7 +1,46 @@
 <html>
   <head>
    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script src="https://cdn.netpie.io/microgear.js"></script>
    <script type="text/javascript">
+
+  const APPID     = "HelloNetpie1";
+  const APPKEY    = "ioBXGzWuhroq3Nf";
+  const APPSECRET = "sORBB7XppfFYLswdpBgj5NrNO";
+
+  var microgear = Microgear.create({
+    key: APPKEY,
+    secret: APPSECRET,
+    alias : "myhtml"         /*  optional  */
+  });
+
+  microgear.on('message',function(topic,msg) {
+    document.getElementById("data").innerHTML = msg;
+  });
+
+  microgear.on('connected', function() {
+    microgear.setAlias('htmlgear');    /* alias can be renamed anytime with this function */
+    document.getElementById("data").innerHTML = "Now I am connected with netpie...";
+    setInterval(function() {
+      microgear.chat("htmlgear","Hello from myself at "+Date.now());
+    },5000);
+  });
+
+  microgear.on('present', function(event) {
+    console.log(event);
+  });
+
+  microgear.on('absent', function(event) {
+    console.log(event);
+  });
+
+  microgear.connect(APPID);
+
+
+
+
+
+
       google.charts.load('current', {'packages':['gauge']});
       google.charts.setOnLoadCallback(drawChart);
 
@@ -41,6 +80,7 @@
     </script>
   </head>
   <body>
+    <div id="data">_____</div>
     <div id="chart_div" style="width: 400px; height: 120px;"></div>
   </body>
 </html>
