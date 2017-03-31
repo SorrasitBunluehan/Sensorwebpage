@@ -7,6 +7,7 @@
   const APPID     = "HelloNetpie1";
   const APPKEY    = "ioBXGzWuhroq3Nf";
   const APPSECRET = "sORBB7XppfFYLswdpBgj5NrNO";
+  var humid,temp;
 
   var microgear = Microgear.create({
     key: APPKEY,
@@ -15,15 +16,19 @@
   });
 
   microgear.on('message',function(topic,msg) {
+    var data = msg.split(",");
+    humid = data[1];
+    temp = data[0];
     document.getElementById("data").innerHTML = msg;
   });
 
   microgear.on('connected', function() {
+    microgear.subscribe("/DHT22");
     microgear.setAlias('htmlgear');    /* alias can be renamed anytime with this function */
     document.getElementById("data").innerHTML = "Now I am connected with netpie...";
-    setInterval(function() {
-      microgear.chat("htmlgear","Hello from myself at "+Date.now());
-    },5000);
+    // setInterval(function() {
+    //   microgear.chat("htmlgear","Hello from myself at "+Date.now());
+    // },5000);
   });
 
   microgear.on('present', function(event) {
@@ -48,9 +53,9 @@
 
         var data = google.visualization.arrayToDataTable([
           ['Label', 'Value'],
-          ['Memory', 80],
-          ['CPU', 55],
-          ['Network', 68]
+          ['Temperature', temp],
+          ['Humid', humid],
+          
         ]);
 
         var options = {
@@ -67,15 +72,12 @@
         setInterval(function() {
           data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
           chart.draw(data, options);
-        }, 13000);
+        }, 1000);
         setInterval(function() {
           data.setValue(1, 1, 40 + Math.round(60 * Math.random()));
           chart.draw(data, options);
-        }, 5000);
-        setInterval(function() {
-          data.setValue(2, 1, 60 + Math.round(20 * Math.random()));
-          chart.draw(data, options);
-        }, 26000);
+        }, 1000);
+    
       }
     </script>
   </head>
