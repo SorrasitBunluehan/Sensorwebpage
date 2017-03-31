@@ -24,6 +24,8 @@
     // const APPID     = "HelloNetpie1";
     // const APPKEY    = "ioBXGzWuhroq3Nf";
     // const APPSECRET = "sORBB7XppfFYLswdpBgj5NrNO";
+    var w = window.innerWidth;
+    var h = window.innerHeight;
    
     var humid,temp;
     var chart1,chart2;
@@ -50,14 +52,14 @@
       ]);
 
       var options1 = {
-        width: 800, height: 300,
+        width: w*0.8, height: w*0.8,
         redFrom: 40, redTo: 60,
         yellowFrom:30, yellowTo: 40,
         minorTicks: 5,max:60
       };
 
       var options2 = {
-        width: 800, height: 300,
+        width: w*0.8, height: w*0.8,
         minorTicks: 5
       };
 
