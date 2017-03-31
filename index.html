@@ -5,7 +5,7 @@
   </head>
   <body style="margin: auto;height: 100vh">
     <div style="width: 100vw;display: absolute">
-      <div id="status" style="float:right;display: absolute">offline</div>
+      <div id="status" style="float:right"><h3 style="color: red">OFFLINE</h3></div>
     </div>
     <div id="wrapper" style="text-align: center;height: 100vh">    
       <div id="yourdiv" style="display: inline-block;">
@@ -95,7 +95,7 @@
 
     microgear.on('present', function(event) {
       if(event.alias=="Light_control"){
-         document.getElementById("status").innerHTML = "online";
+         document.getElementById("status").innerHTML = "<h3 style='color: green'>ONLINE</h3>";
       }
     });
 
@@ -103,7 +103,7 @@
       if(event.alias=="Light_control"){
          humid = 0;
          temp = 0;
-         document.getElementById("status").innerHTML = "offline";
+         document.getElementById("status").innerHTML = "<h3 style='color: red'>OFFLINE</h3>";
       }
     });
     microgear.connect(APPID);
