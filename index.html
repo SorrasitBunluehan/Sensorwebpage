@@ -16,7 +16,7 @@
   });
 
   microgear.on('message',function(topic,msg) {
-    var data = msg.split(",");
+    var data = msg.split(":");
     humid = data[1];
     temp = data[0];
     document.getElementById("data").innerHTML = msg;
