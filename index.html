@@ -3,9 +3,9 @@
    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
    <script src="https://cdn.netpie.io/microgear.js"></script>
   </head>
-  <body style="margin: auto;height: 100vh">
+  <body style="margin: auto;height: 100vh" id="body">
     <div style="width: 100vw;display: absolute">
-      <div id="status" style="float:right"><h3 style="color: red">OFFLINE</h3></div>
+      <div id="status" style="float:right"><h3 style="color: red">OFFLINE </h3></div>
     </div>
     <div id="wrapper" style="text-align: center;height: 100vh">    
       <div id="yourdiv" style="display: inline-block;">
@@ -20,6 +20,7 @@
     
   </body>
   <script type="text/javascript">
+    document.getElementById("body").style.background = "grey";
 
     // const APPID     = "HelloNetpie1";
     // const APPKEY    = "ioBXGzWuhroq3Nf";
@@ -91,6 +92,7 @@
     microgear.on('connected', function() {
       microgear.subscribe("/DHT22");
       microgear.setAlias('htmlgear');    /* alias can be renamed anytime with this function */
+      document.getElementById("body").style.background = "white";
     });
 
     microgear.on('present', function(event) {
